@@ -9,7 +9,7 @@ public class FireBall : MonoBehaviour
     public float damage;
     public Rigidbody2D rb;
 
-    private bool expload;
+    private bool exploded;
     //private Collider2D collider;
     private Animator anim;
 
@@ -17,43 +17,29 @@ public class FireBall : MonoBehaviour
     {
         anim = GetComponent<Animator>();
         rb.velocity = transform.up * speed;
-    }
-    void Update()
-    {
-        lifetime -= Time.deltaTime;
-        if ( lifetime <= 0)
-        {
-            Destroy(gameObject);
-        }
-
+        Destroy(gameObject, lifetime);
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.tag == "Wall") 
+        if (other.CompareTag("Wall") || other.CompareTag("Enemy"))
         {
-            rb.velocity = Vector2.zero;
-            anim.SetTrigger("Explode");
-            if (!expload)
+            Explode();
+            if (other.CompareTag("Enemy"))
             {
-                gameObject.transform.localScale += new Vector3(2f, 2f, 2f);
-                expload = true;
+                other.GetComponent<Base_Enemy>().TakeDamage(damage);
             }
-            Destroy(gameObject, 0.4f);
-        }
-
-        if (other.gameObject.tag == "Enemy")
-        {
-            other.GetComponent<Base_Enemy>().TakeDamage(damage);
-            rb.velocity = Vector2.zero;
-            anim.SetTrigger("Explode");
-            if (!expload)
-            {
-                gameObject.transform.localScale += new Vector3(2f, 2f, 2f);
-                expload = true;
-            }
-            
-            Destroy(gameObject, 0.4f);
         }
     }
+
+    private void Explode()
+    {
+        if (exploded) return;
+        exploded = true;
+        rb.velocity = Vector2.zero;
+        transform.localScale *= 2f;
+        anim.SetTrigger("Explode");
+        Destroy(gameObject, 0.4f);
+    }
+}
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,6 +6,7 @@ using UnityEngine;
 public class Staff : MonoBehaviour
 {
     public float offset;
+    public float Offset { set => offset = value; }
     public float speed;
     public GameObject spell;
     public Transform point;
@@ -25,22 +27,8 @@ public class Staff : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (timeBtwCast <= 0)
-        {
-            if (Input.GetMouseButton(0))
-            {
-                Vector3 difference = cam.ScreenToWorldPoint(Input.mousePosition) - transform.position;
-                float rotZ = Mathf.Atan2(difference.y, difference.x) * Mathf.Rad2Deg;
-                transform.rotation = Quaternion.Euler(0, 0, rotZ + offset);
-
-                Instantiate(spell, point.position, point.rotation);
-                timeBtwCast = startTimeBtwCast;
-            }
-        }
-        else
-        {
-            timeBtwCast -= Time.deltaTime;
-        }
+        Cast();
+        
 
         if (canDash <= 0)
         {
@@ -60,6 +48,24 @@ public class Staff : MonoBehaviour
         }
     }
 
+    private void Cast()
+    {
+        if (timeBtwCast > 0)
+        {
+            timeBtwCast -= Time.deltaTime;
+            return;
+        }
+        if (Input.GetMouseButton(0))
+        {
+            Vector3 difference = cam.ScreenToWorldPoint(Input.mousePosition) - transform.position;
+            float rotZ = Mathf.Atan2(difference.y, difference.x) * Mathf.Rad2Deg;
+            transform.rotation = Quaternion.Euler(0, 0, rotZ + offset);
+
+            Instantiate(spell, point.position, point.rotation);
+            timeBtwCast = startTimeBtwCast;
+        }
+
+    }
     //void Floating()
     //{
     //    float i = 1;

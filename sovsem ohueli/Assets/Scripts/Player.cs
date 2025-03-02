@@ -29,7 +29,7 @@ public class Player : MonoBehaviour
     void Update()
     {
         Move();
-        if (moveVelocity != Vector2.zero) { anim.SetBool("IsRun", true); } else { anim.SetBool("IsRun", false); }
+        anim.SetBool("IsRun", moveVelocity != Vector2.zero);
 
         //if (Input.GetMouseButton(1) && canDash <= 0) {
         //    canMove = false;    
@@ -44,29 +44,28 @@ public class Player : MonoBehaviour
 
     private void FixedUpdate()
     {
-        rb.MovePosition(rb.position + moveVelocity * Time.deltaTime);
+        rb.MovePosition(rb.position + moveVelocity * Time.fixedDeltaTime);
         
     }
 
-    void Move()
+    private void Move()
     {
-        if (canMove)
+        if (!canMove) return;
+
+        Vector2 moveInput = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+        moveVelocity = moveInput.normalized * speed;
+
+        if (moveInput.x > 0 && left || moveInput.x < 0 && !left)
         {
-            moveInput = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
-            if (moveInput.x > 0 && left)
-            {
-                transform.localScale = new Vector3(transform.localScale.x *-1, transform.localScale.y, transform.localScale.z);
-                staff.offset = 0;
-                left = false;
-            }
-            else if (moveInput.x < 0 && !left)
-            {
-                transform.localScale = new Vector3(transform.localScale.x * -1, transform.localScale.y, transform.localScale.z);
-                left = true;
-                staff.offset = 180;
-            }
-            moveVelocity = moveInput.normalized * speed;
+            FlipCharacter();
         }
+    }
+
+    private void FlipCharacter()
+    {
+        left = !left;
+        transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
+        staff.Offset = left ? 180 : 0;
     }
 
     //void Dash()
@@ -81,3 +80,4 @@ public class Player : MonoBehaviour
     //}
 
 }
+    
