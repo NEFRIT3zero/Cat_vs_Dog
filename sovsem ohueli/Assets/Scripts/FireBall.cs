@@ -42,4 +42,3 @@ public class FireBall : MonoBehaviour
         Destroy(gameObject, 0.4f);
     }
 }
-}

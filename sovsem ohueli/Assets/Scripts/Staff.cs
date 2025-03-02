@@ -30,22 +30,22 @@ public class Staff : MonoBehaviour
         Cast();
         
 
-        if (canDash <= 0)
-        {
-            if (Input.GetMouseButton(1))
-            {
-                Vector3 difference = cam.ScreenToWorldPoint(Input.mousePosition) - transform.position;
-                float rotZ = Mathf.Atan2(difference.y, difference.x) * Mathf.Rad2Deg;
-                transform.rotation = Quaternion.Euler(0, 0, rotZ + offset);
+        //if (canDash <= 0)
+        //{
+        //    if (Input.GetMouseButton(1))
+        //    {
+        //        Vector3 difference = cam.ScreenToWorldPoint(Input.mousePosition) - transform.position;
+        //        float rotZ = Mathf.Atan2(difference.y, difference.x) * Mathf.Rad2Deg;
+        //        transform.rotation = Quaternion.Euler(0, 0, rotZ + offset);
 
-                player.velocity = (point.position * 100  );
+        //        player.velocity = (point.position * 100  );
                 
-            }
-        }
-        else
-        {
-            canDash -= Time.deltaTime;
-        }
+        //    }
+        //}
+        //else
+        //{
+        //    canDash -= Time.deltaTime;
+        //}
     }
 
     private void Cast()

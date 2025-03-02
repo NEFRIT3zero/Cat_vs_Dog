@@ -18,6 +18,8 @@ public class Player : MonoBehaviour
     
     public bool canMove = true;
     public bool left = false;
+    private float timeBtwDash;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -28,9 +30,10 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Move();
+        
         anim.SetBool("IsRun", moveVelocity != Vector2.zero);
 
+        Move();
         //if (Input.GetMouseButton(1) && canDash <= 0) {
         //    canMove = false;    
         //    Dash();
@@ -39,13 +42,12 @@ public class Player : MonoBehaviour
         //if (canDash > 0)
         //{
         //    canDash -= Time.deltaTime;
-        //}
+        Dash();
     }
 
     private void FixedUpdate()
     {
-        rb.MovePosition(rb.position + moveVelocity * Time.fixedDeltaTime);
-        
+        //rb.MovePosition(rb.position + moveVelocity * Time.fixedDeltaTime);
     }
 
     private void Move()
@@ -53,7 +55,8 @@ public class Player : MonoBehaviour
         if (!canMove) return;
 
         Vector2 moveInput = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
-        moveVelocity = moveInput.normalized * speed;
+        moveVelocity = moveInput.normalized * speed * Time.deltaTime;
+        rb.velocity = moveVelocity;
 
         if (moveInput.x > 0 && left || moveInput.x < 0 && !left)
         {
@@ -68,16 +71,23 @@ public class Player : MonoBehaviour
         staff.Offset = left ? 180 : 0;
     }
 
-    //void Dash()
-    //{
-    //    canMove = false;
-    //    Vector2 difference = Camera.main.ScreenToWorldPoint(Input.mousePosition) ;
-    //    //float rotZ = Mathf.Atan2(difference.y, difference.x) * Mathf.Rad2Deg;
-    //    //transform.rotation = Quaternion.Euler(0, 0, rotZ - 90);
-    //    rb.velocity = Vector2.zero;
-    //    rb.AddForce(difference * 10);
-    //    canMove = true;
-    //}
+    void Dash()
+    {
+        if (timeBtwDash > 0)
+        {
+            timeBtwDash -= Time.deltaTime;
+            return;
+        }
+        //Vector2 difference = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        //float rotZ = Mathf.Atan2(difference.y, difference.x) * Mathf.Rad2Deg;
+        //transform.rotation = Quaternion.Euler(0, 0, rotZ - 90);
+        if (Input.GetMouseButtonDown(1)) 
+        { 
+            rb.velocity = Vector2.zero;
+            rb.AddForce(moveVelocity * 300);
+            timeBtwDash = 2;
+        }
+    }
 
 }
     
