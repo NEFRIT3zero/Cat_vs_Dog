@@ -1,14 +1,12 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class Staff : MonoBehaviour
+public class Staff : MonoBehaviour, IStaff
 {
     public float offset;
     public float Offset { set => offset = value; }
     public float speed;
-    public GameObject spell;
+    public GameObject spell1;
+    public GameObject spell2;
     public Transform point;
     public Rigidbody2D player;
 
@@ -27,8 +25,16 @@ public class Staff : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Cast();
-        
+        if (Input.GetMouseButton(0))
+        {
+            Cast(spell1);
+        }
+        if (Input.GetMouseButton(1))
+        {
+            Cast(spell2);
+        }
+
+
 
         //if (canDash <= 0)
         //{
@@ -39,7 +45,7 @@ public class Staff : MonoBehaviour
         //        transform.rotation = Quaternion.Euler(0, 0, rotZ + offset);
 
         //        player.velocity = (point.position * 100  );
-                
+
         //    }
         //}
         //else
@@ -48,22 +54,22 @@ public class Staff : MonoBehaviour
         //}
     }
 
-    private void Cast()
+    public void Cast(GameObject spell)
     {
         if (timeBtwCast > 0)
         {
             timeBtwCast -= Time.deltaTime;
             return;
         }
-        if (Input.GetMouseButton(0))
-        {
-            Vector3 difference = cam.ScreenToWorldPoint(Input.mousePosition) - transform.position;
-            float rotZ = Mathf.Atan2(difference.y, difference.x) * Mathf.Rad2Deg;
-            transform.rotation = Quaternion.Euler(0, 0, rotZ + offset);
 
-            Instantiate(spell, point.position, point.rotation);
-            timeBtwCast = startTimeBtwCast;
-        }
+
+        Vector3 difference = cam.ScreenToWorldPoint(Input.mousePosition) - transform.position;
+        float rotZ = Mathf.Atan2(difference.y, difference.x) * Mathf.Rad2Deg;
+        transform.rotation = Quaternion.Euler(0, 0, rotZ + offset);
+
+        Instantiate(spell, point.position, point.rotation);
+        timeBtwCast = startTimeBtwCast;
+
 
     }
     //void Floating()

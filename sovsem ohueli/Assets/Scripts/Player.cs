@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class Player : MonoBehaviour, IDamageble
 {
     public float speed;
+    public float dashSpeed;
     public Staff staff;
 
     private Vector2 moveVelocity;
@@ -14,8 +15,6 @@ public class Player : MonoBehaviour
     private Animator anim;
 
 
-
-    
     public bool canMove = true;
     public bool left = false;
     private float timeBtwDash;
@@ -81,13 +80,19 @@ public class Player : MonoBehaviour
         //Vector2 difference = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         //float rotZ = Mathf.Atan2(difference.y, difference.x) * Mathf.Rad2Deg;
         //transform.rotation = Quaternion.Euler(0, 0, rotZ - 90);
-        if (Input.GetMouseButtonDown(1)) 
-        { 
-            rb.velocity = Vector2.zero;
-            rb.AddForce(moveVelocity * 300);
+        if (Input.GetMouseButtonDown(2)) 
+        {
+            rb.velocity = rb.velocity.normalized * dashSpeed;
+            //rb.velocity = Vector2.zero;
+            //rb.AddForce(moveVelocity * 500);
             timeBtwDash = 2;
         }
     }
 
+    public void TakeDamage(float damage)
+    {
+        throw new System.NotImplementedException();
+    }
+
+
 }
-    
