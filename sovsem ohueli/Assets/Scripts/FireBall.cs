@@ -27,7 +27,7 @@ public class FireBall : MonoBehaviour, ISpell
             Explode();
             if (other.CompareTag("Enemy"))
             {
-                other.GetComponent<Base_Enemy>().TakeDamage(damage);
+                other.GetComponent<AbstractEnemy>().TakeDamage(damage);
             }
         }
     }

@@ -8,7 +8,7 @@ public class Staff : MonoBehaviour, IStaff
     public GameObject spell1;
     public GameObject spell2;
     public Transform point;
-    public Rigidbody2D player;
+    //public Rigidbody2D player;
 
     private float check;
     private float canDash = 0;
@@ -25,15 +25,19 @@ public class Staff : MonoBehaviour, IStaff
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButton(0))
+        if (timeBtwCast < 0)
         {
-            Cast(spell1);
-        }
-        if (Input.GetMouseButton(1))
-        {
-            Cast(spell2);
-        }
 
+            if (Input.GetMouseButton(0))
+            {
+                Cast(spell1);
+            }
+            if (Input.GetMouseButton(1))
+            {
+                Cast(spell2);
+            }
+        }
+        timeBtwCast -= Time.deltaTime;
 
 
         //if (canDash <= 0)
@@ -56,16 +60,16 @@ public class Staff : MonoBehaviour, IStaff
 
     public void Cast(GameObject spell)
     {
-        if (timeBtwCast > 0)
-        {
-            timeBtwCast -= Time.deltaTime;
-            return;
-        }
+        //if (timeBtwCast > 0)
+        //{
+        //    timeBtwCast -= Time.deltaTime;
+        //    return;
+        //}
 
 
         Vector3 difference = cam.ScreenToWorldPoint(Input.mousePosition) - transform.position;
         float rotZ = Mathf.Atan2(difference.y, difference.x) * Mathf.Rad2Deg;
-        transform.rotation = Quaternion.Euler(0, 0, rotZ + offset);
+        point.rotation = Quaternion.Euler(0, 0, rotZ -90);
 
         Instantiate(spell, point.position, point.rotation);
         timeBtwCast = startTimeBtwCast;

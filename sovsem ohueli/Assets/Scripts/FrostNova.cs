@@ -32,7 +32,7 @@ public class FrostNova : MonoBehaviour, ISpell
 
         if (other.gameObject.tag == "Enemy")
         {
-            other.GetComponent<Base_Enemy>().TakeDamage(damage);
+            other.GetComponent<AbstractEnemy>().TakeDamage(damage);
 
         }
     }

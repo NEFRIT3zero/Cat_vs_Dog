@@ -4,7 +4,7 @@ using UnityEngine;
 
 public abstract class AbstractEnemy : MonoBehaviour, IDamageble
 {
-    public virtual float Health { get; set; }
+    public float health = 10; 
     public float speed;
     bool left = false;
 

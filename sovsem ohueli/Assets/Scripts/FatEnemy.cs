@@ -4,5 +4,9 @@ using UnityEngine;
 
 public class FatEnemy : AbstractEnemy
 {
-    public override float Health { get => Health; set => Health = 100f; }
+    //public override float Health { get => Health; set => Health = 100f; }
+    private void Start()
+    {
+        health = 100;
+    }
 }
